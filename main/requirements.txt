@@ -1,0 +1,11 @@
+numpy
+pandas
+mysql-connector-python
+pymysql
+python-dotenv
+scikit-learn
+xgboost
+Flask
+plotly
+
+#-e .
