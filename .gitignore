@@ -169,3 +169,18 @@ cython_debug/
 
 # PyPI configuration file
 .pypirc
+
+#ignore models
+/main/artifacts/models/*.pkl
+/main/artifacts/*.pkl
+
+#ignore testing data
+/main/temp/
+
+#airflow-ignore
+/airflow/airflow-venv/
+/airflow/standalone_admin_password.txt
+/airflow/dags/artifacts/*.pkl
+/airflow/dags/temp/
+/airflow/src/artifacts/
+/airflow/src/temp/
