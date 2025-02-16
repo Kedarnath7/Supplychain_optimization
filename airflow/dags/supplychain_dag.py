@@ -16,7 +16,11 @@ from sklearn.ensemble import RandomForestClassifier, RandomForestRegressor
 from sklearn.metrics import accuracy_score, mean_squared_error
 from psycopg2 import Error as PostgresError
 from sqlalchemy import create_engine
-from airflow.hooks.base_hook import BaseHook
+#from airflow.hooks.base_hook import BaseHook
+import dagshub
+import mlflow
+import mlflow.sklearn
+from sklearn.metrics import precision_score, recall_score, f1_score, mean_absolute_error, r2_score
 
 ARTIFACTS_DIR = os.path.join(os.path.dirname(__file__), 'artifacts')
 os.makedirs(ARTIFACTS_DIR, exist_ok=True)  # Ensure the directory exists
@@ -367,6 +371,12 @@ def store_in_postgres(**kwargs):
         raise
 
 #train
+dagshub.init(repo_owner='kedarnathpinjala11', repo_name='Supplychain_optimization', mlflow=True)
+os.environ['MLFLOW_TRACKING_INSECURE_TLS'] = 'true'
+import requests
+requests.get("https://dagshub.com", verify=True)
+
+
 def train_models(**kwargs):
     try:
         ti = kwargs['ti']
@@ -406,23 +416,54 @@ def train_models(**kwargs):
             else:
                 raise ValueError(f"Unknown task type: {task_config['task_type']}")
 
-            # Fit the model
-            model.fit(X_train, y_train)
+            with mlflow.start_run(run_name=task_config["task"]):
+                mlflow.log_params({"task": task_config["task"], "task_type": task_config["task_type"]})
+                
+                model.fit(X_train, y_train)
+                y_pred = model.predict(X_test)
 
-            # Evaluate the model
-            y_pred = model.predict(X_test)
-            if task_config['task_type'] == 'classification':
-                accuracy = accuracy_score(y_test, y_pred)
-                logging.info(f"Model accuracy for {task_config['task']}: {accuracy}")
-            elif task_config['task_type'] == 'regression':
-                mse = mean_squared_error(y_test, y_pred)
-                logging.info(f"Model MSE for {task_config['task']}: {mse}")
+                if task_config['task_type'] == 'classification':
+                    accuracy = accuracy_score(y_test, y_pred)
+                    precision = precision_score(y_test, y_pred, average='weighted', zero_division=0)
+                    recall = recall_score(y_test, y_pred, average='weighted', zero_division=0)
+                    f1 = f1_score(y_test, y_pred, average='weighted', zero_division=0)
 
-            # Save the model
-            model_path = os.path.join(ARTIFACTS_DIR, f"{task_config['task']}_model.pkl")
-            with open(model_path, 'wb') as f:
-                pickle.dump(model, f)
-            logging.info(f"Model saved to {model_path}")
+                    mlflow.log_metric("accuracy", accuracy)
+                    mlflow.log_metric("precision", precision)
+                    mlflow.log_metric("recall", recall)
+                    mlflow.log_metric("f1_score", f1)
+
+                    logging.info(f"Model accuracy for {task_config['task']}: {accuracy}")
+                    logging.info(f"Model precision for {task_config['task']}: {precision}")
+                    logging.info(f"Model recall for {task_config['task']}: {recall}")
+                    logging.info(f"Model F1 score for {task_config['task']}: {f1}")
+
+                elif task_config['task_type'] == 'regression':
+                    mse = mean_squared_error(y_test, y_pred)
+                    rmse = mse ** 0.5
+                    mae = mean_absolute_error(y_test, y_pred)
+                    r2 = r2_score(y_test, y_pred)
+
+                    mlflow.log_metric("mse", mse)
+                    mlflow.log_metric("rmse", rmse)
+                    mlflow.log_metric("mae", mae)
+                    mlflow.log_metric("r2_score", r2)
+
+                    logging.info(f"Model MSE for {task_config['task']}: {mse}")
+                    logging.info(f"Model RMSE for {task_config['task']}: {rmse}")
+                    logging.info(f"Model MAE for {task_config['task']}: {mae}")
+                    logging.info(f"Model R² score for {task_config['task']}: {r2}")
+
+
+                model_path = os.path.join(ARTIFACTS_DIR, f"{task_config['task']}_model.pkl")
+                with open(model_path, 'wb') as f:
+                    pickle.dump(model, f)
+
+                #log models only if needed
+                #mlflow.log_artifact(model_path)
+                #mlflow.sklearn.log_model(model, f"{task_config['task']}_model")
+
+                logging.info(f"Model saved to {model_path}")
 
         conn.close()
 
