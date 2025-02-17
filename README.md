@@ -1,7 +1,7 @@
 # Supply Chain Optimization
 
 ## 📌 Overview
-This project focuses on optimizing the supply chain using **machine learning algotithms** and **automation**. It integrates **Apache Airflow** for workflow orchestration, **MLflow** for model monitoring, and **DVC** for data versioning. The project also leverages **Docker** for containerization and reproducibility.
+This project focuses on optimizing the supply chain using **machine learning algorithms** and **automation**. It integrates **Apache Airflow** for workflow orchestration, **MLflow** for model monitoring, and **DVC** for data versioning. The project also leverages **Docker** for containerization and reproducibility.
 
 ## 🚀 Features
 - **Automated Workflow Orchestration** using Apache Airflow
@@ -59,7 +59,7 @@ cd main
 ```bash
 conda create --name venv python=3.8 -y
 conda activate venv
-pip install -r main/requirements.txt
+pip install -r main/requirements.txt #or use sudo
 ```
 
 ### 3️⃣ Set Up Airflow (Orchestration)
