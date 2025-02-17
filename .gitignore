@@ -176,6 +176,7 @@ cython_debug/
 
 #ignore testing data
 /main/temp/
+/main/logs
 
 #airflow-ignore
 /airflow/airflow-venv/
@@ -184,3 +185,7 @@ cython_debug/
 /airflow/dags/temp/
 /airflow/src/artifacts/
 /airflow/src/temp/
+/airflow/logs/
+/airflow/airflow.cfg
+/airflow/airflow.db
+/airflow/webserver_config.py
