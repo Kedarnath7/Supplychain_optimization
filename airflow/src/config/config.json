@@ -1,0 +1,28 @@
+{
+    "tasks": [
+        {
+            "task": "late_delivery_risk_prediction",
+            "numerical_col": ["Days_for_shipping_real", "Days_for_shipment_scheduled", "Product_Price", "Order_Item_Quantity", "Order_Item_Discount_Rate"],
+            "categorical_col": ["Shipping_Mode", "Category_Id", "Category_Name", "Order_State", "Order_Region", "Order_Country"],
+            "target": "Late_delivery_risk",
+            "model_features": ["Category_Id", "Category_Name", "Days_for_shipping_real", "Days_for_shipment_scheduled", "Shipping_Mode", "Order_State", "Order_Region", "Order_Country", "Product_Price", "Order_Item_Quantity", "Order_Item_Discount_Rate"],
+            "task_type": "classification"
+        },
+        {
+            "task": "order_profit_prediction",
+            "numerical_col": ["Sales", "Product_Price", "Order_Item_Quantity", "Order_Item_Discount_Rate", "Profit_Margin"],
+            "categorical_col": ["Shipping_Mode", "Order_State", "Order_Country", "Customer_Segment"],
+            "target": "Order_Profit_Per_Order",
+            "model_features": ["Sales", "Product_Price", "Order_Item_Quantity", "Order_Item_Discount_Rate", "Profit_Margin", "Shipping_Mode", "Order_State", "Order_Country", "Customer_Segment"],
+            "task_type": "regression"
+        },
+        {
+            "task": "shipping_time_prediction",
+            "numerical_col": ["Days_for_shipment_scheduled", "Product_Price", "Order_Item_Quantity", "Order_Item_Discount_Rate"],
+            "categorical_col": ["Shipping_Mode", "Category_Id", "Category_Name", "Order_State", "Order_Region", "Order_Country"],
+            "target": "Days_for_shipping_real",
+            "model_features": ["Category_Id", "Category_Name", "Days_for_shipment_scheduled", "Shipping_Mode", "Order_State", "Order_Region", "Order_Country", "Product_Price", "Order_Item_Quantity", "Order_Item_Discount_Rate"],
+            "task_type": "regression"
+        }
+    ]
+}
