@@ -105,6 +105,11 @@ airflow webserver -p 8080 &
 ## 🤝 Contribution
 Feel free to fork this repository, submit issues, and contribute to improvements!
 
+![Screenshot 2025-01-05 005217](https://github.com/user-attachments/assets/26321bf9-392c-4296-966b-8a5d5ffffc46)
+![Screenshot 2025-01-05 005117](https://github.com/user-attachments/assets/f4256114-aa98-4e99-a1a3-4243cbc00da6)
+![Screenshot 2025-01-05 005203](https://github.com/user-attachments/assets/d1c38eb2-5d95-49d1-94f9-4edbb05cdbbc)
+![Screenshot 2025-01-05 005211](https://github.com/user-attachments/assets/6f309f21-f344-4594-b26c-8baa4c419447)
+
 ## 📜 License
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
